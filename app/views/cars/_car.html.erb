@@ -1,0 +1,5 @@
+<li>
+  <%= link_to car.title, car_path(car) %>
+  - Location: <%= car.location %>
+  - Price: <%= number_to_currency(car.daily_price) %> per day
+</li>
