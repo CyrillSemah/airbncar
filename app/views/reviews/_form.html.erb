@@ -1,0 +1,29 @@
+<%= form_with model: [car, Review.new], local: true, class: "mb-4" do |f| %>
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Write a Review</h5>
+      
+      <div class="mb-3">
+        <%= f.label :rating, class: "form-label" %>
+        <div class="rating-input">
+          <% 5.downto(1) do |i| %>
+            <div class="form-check form-check-inline">
+              <%= f.radio_button :rating, i, class: "form-check-input", required: true %>
+              <%= f.label "rating_#{i}", class: "form-check-label" do %>
+                <%= i %> <i class="bi bi-star-fill text-warning"></i>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :comment, class: "form-label" %>
+        <%= f.text_area :comment, class: "form-control", rows: 3, required: true,
+            placeholder: "Share your experience with this car..." %>
+      </div>
+
+      <%= f.submit "Post Review", class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>

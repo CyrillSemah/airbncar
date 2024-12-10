@@ -1,5 +1,71 @@
-<h1>Available Cars</h1>
-<%= link_to "Add a New Car", new_car_path, class: "btn btn-primary" %>
-<ul>
-  <%= render @cars %>
-</ul>
+<div class="row mb-4">
+  <div class="col">
+    <h1>Available Cars</h1>
+  </div>
+  <div class="col text-end">
+    <%= link_to "Add a New Car", new_car_path, class: "btn btn-primary" if user_signed_in? %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-3 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Search Cars</h5>
+        <%= form_with url: cars_path, method: :get, local: true do |f| %>
+          <div class="mb-3">
+            <%= f.label :location, class: "form-label" %>
+            <%= f.text_field :location, class: "form-control", value: params[:location] %>
+          </div>
+          <div class="mb-3">
+            <%= f.label :start_date, class: "form-label" %>
+            <%= f.date_field :start_date, class: "form-control", value: params[:start_date] %>
+          </div>
+          <div class="mb-3">
+            <%= f.label :end_date, class: "form-label" %>
+            <%= f.date_field :end_date, class: "form-control", value: params[:end_date] %>
+          </div>
+          <div class="mb-3">
+            <%= f.label :capacity, "Minimum Capacity", class: "form-label" %>
+            <%= f.number_field :capacity, class: "form-control", value: params[:capacity], min: 1 %>
+          </div>
+          <%= f.submit "Search", class: "btn btn-primary w-100" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-9">
+    <div class="row">
+      <% @cars.each do |car| %>
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card h-100">
+            <% if car.photo.attached? %>
+              <%= image_tag car.photo, class: "card-img-top", style: "height: 200px; object-fit: cover;" %>
+            <% else %>
+              <div class="bg-light text-center py-5">
+                <i class="bi bi-car-front display-4"></i>
+              </div>
+            <% end %>
+            <div class="card-body">
+              <h5 class="card-title"><%= car.title %></h5>
+              <p class="card-text text-muted">
+                <i class="bi bi-geo-alt"></i> <%= car.location %><br>
+                <i class="bi bi-people"></i> <%= car.capacity %> people<br>
+                <i class="bi bi-tag"></i> <%= number_to_currency(car.daily_price) %> per day
+              </p>
+              <%= link_to "View Details", car_path(car), class: "btn btn-outline-primary" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <% if @cars.empty? %>
+      <div class="text-center py-5">
+        <h3>No cars found</h3>
+        <p>Try adjusting your search criteria</p>
+      </div>
+    <% end %>
+  </div>
+</div>

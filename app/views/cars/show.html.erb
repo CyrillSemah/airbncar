@@ -1,23 +1,155 @@
-<h1><%= @car.title %></h1>
-<p><%= @car.description %></p>
-<p>Location: <%= @car.location %></p>
-<p>Capacity: <%= @car.capacity %> people</p>
-<p>Daily Price: <%= number_to_currency(@car.daily_price) %></p>
-<ul>
-  <% @bookings.each do |booking| %>
-    <li>
-      From <%= booking.start_date %> to <%= booking.end_date %> - <%= booking.people %> people
-      <%= link_to "Cancel", booking_path(booking), method: :delete, data: { confirm: "Are you sure?" } %>
-    </li>
-  <% end %>
-</ul>
-<h3>Make a Booking</h3>
-<%= form_with model: [@car, @booking], local: true do |f| %>
-  <%= f.label :start_date %>
-  <%= f.date_field :start_date %>
-  <%= f.label :end_date %>
-  <%= f.date_field :end_date %>
-  <%= f.label :people %>
-  <%= f.number_field :people %>
-  <%= f.submit "Book Now", class: "btn btn-primary" %>
-<% end %>
+<div class="row">
+  <div class="col-md-8">
+    <% if @car.photo.attached? %>
+      <%= image_tag @car.photo, class: "img-fluid rounded mb-4", style: "max-height: 400px; width: 100%; object-fit: cover;" %>
+    <% else %>
+      <div class="bg-light text-center py-5 rounded mb-4">
+        <i class="bi bi-car-front display-1"></i>
+      </div>
+    <% end %>
+
+    <h1 class="mb-4">
+      <%= @car.title %>
+      <% if @car.average_rating > 0 %>
+        <small class="text-warning">
+          <%= @car.average_rating %>
+          <i class="bi bi-star-fill"></i>
+        </small>
+      <% end %>
+    </h1>
+
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-6 col-md-3 mb-3">
+            <div class="text-muted">Location</div>
+            <div><i class="bi bi-geo-alt"></i> <%= @car.location %></div>
+          </div>
+          <div class="col-sm-6 col-md-3 mb-3">
+            <div class="text-muted">Capacity</div>
+            <div><i class="bi bi-people"></i> <%= @car.capacity %> people</div>
+          </div>
+          <div class="col-sm-6 col-md-3 mb-3">
+            <div class="text-muted">Size</div>
+            <div><i class="bi bi-arrows-angle-expand"></i> <%= @car.size.titleize %></div>
+          </div>
+          <div class="col-sm-6 col-md-3 mb-3">
+            <div class="text-muted">Daily Price</div>
+            <div><i class="bi bi-tag"></i> <%= number_to_currency(@car.daily_price) %></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Description</h5>
+        <p class="card-text"><%= @car.description %></p>
+      </div>
+    </div>
+
+    <% if @car.user == current_user %>
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Upcoming Bookings</h5>
+          <% if @bookings.any? %>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Dates</th>
+                    <th>Renter</th>
+                    <th>People</th>
+                    <th>Total Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @bookings.each do |booking| %>
+                    <tr>
+                      <td>
+                        <%= booking.start_date.strftime("%b %d") %> - 
+                        <%= booking.end_date.strftime("%b %d, %Y") %>
+                      </td>
+                      <td><%= booking.user.email %></td>
+                      <td><%= booking.number_of_people %></td>
+                      <td>
+                        <%= number_to_currency(
+                          @car.daily_price * (booking.end_date - booking.start_date).to_i
+                        ) %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          <% else %>
+            <p class="text-muted">No upcoming bookings</p>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <%= link_to "Edit Car", edit_car_path(@car), class: "btn btn-outline-primary me-2" %>
+        <%= button_to "Delete Car", car_path(@car), method: :delete, 
+            class: "btn btn-outline-danger", 
+            form: { data: { turbo_confirm: "Are you sure? This will also delete all bookings." } } %>
+      </div>
+    <% end %>
+
+    <section id="reviews" class="mb-4">
+      <h3 class="mb-4">Reviews</h3>
+      
+      <%= render 'reviews/summary', car: @car if @car.reviews.any? %>
+
+      <% if user_signed_in? && @car.bookings.where(user: current_user).where('end_date < ?', Date.today).exists? %>
+        <%= render 'reviews/form', car: @car %>
+      <% end %>
+
+      <div class="reviews-list">
+        <%= render @car.reviews.includes(:user).order(created_at: :desc) %>
+      </div>
+    </section>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card sticky-top" style="top: 2rem;">
+      <div class="card-body">
+        <h5 class="card-title">Book this car</h5>
+        
+        <% if user_signed_in? %>
+          <%= form_with model: [@car, @booking], local: true, class: "booking-form" do |f| %>
+            <div class="mb-3">
+              <%= f.label :start_date, class: "form-label" %>
+              <%= f.date_field :start_date, class: "form-control", min: Date.today %>
+            </div>
+
+            <div class="mb-3">
+              <%= f.label :end_date, class: "form-label" %>
+              <%= f.date_field :end_date, class: "form-control", min: Date.today %>
+            </div>
+
+            <div class="mb-3">
+              <%= f.label :number_of_people, class: "form-label" %>
+              <%= f.number_field :number_of_people, class: "form-control", 
+                  min: 1, max: @car.capacity %>
+            </div>
+
+            <div class="mb-3">
+              <div class="text-muted">Total Price</div>
+              <div class="h4" id="total-price">
+                <%= number_to_currency(@car.daily_price) %> per day
+              </div>
+            </div>
+
+            <%= f.submit "Book Now", class: "btn btn-primary w-100" %>
+          <% end %>
+        <% else %>
+          <div class="text-center py-4">
+            <p>Please sign in to book this car</p>
+            <%= link_to "Sign In", new_user_session_path, class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
