@@ -1,5 +1,132 @@
-<h1>Available Cars</h1>
-<%= link_to "Add a New Car", new_car_path, class: "btn btn-primary" %>
-<ul>
-  <%= render @cars %>
-</ul>
+<div class="container-fluid py-5">
+  <!-- Hero Section -->
+  <div class="hero-section text-center mb-5 fade-in">
+    <h1 class="display-4 mb-4">Trouvez la voiture parfaite pour votre prochain voyage</h1>
+    
+    <!-- Search Bar -->
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="search-bar d-flex align-items-center">
+          <div class="flex-grow-1 me-3">
+            <input type="text" class="form-control" placeholder="Où souhaitez-vous louer une voiture ?">
+          </div>
+          <button class="btn btn-primary px-4">
+            <i class="fas fa-search me-2"></i>
+            Rechercher
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters mb-4">
+    <div class="row">
+      <div class="col-md-3">
+        <select class="form-select">
+          <option selected>Prix</option>
+          <option>Moins de 50€/jour</option>
+          <option>50€ - 100€/jour</option>
+          <option>Plus de 100€/jour</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <select class="form-select">
+          <option selected>Type de véhicule</option>
+          <option>Compact</option>
+          <option>Berline</option>
+          <option>SUV</option>
+          <option>Sport</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <select class="form-select">
+          <option selected>Capacité</option>
+          <option>2 places</option>
+          <option>4 places</option>
+          <option>5 places</option>
+          <option>7 places ou plus</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <button class="btn btn-outline-primary w-100">
+          <i class="fas fa-sliders-h me-2"></i>
+          Plus de filtres
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cars Grid -->
+  <div class="row g-4">
+    <% @cars.each do |car| %>
+      <div class="col-md-4 col-lg-3 fade-in">
+        <div class="car-card card h-100">
+          <% if car.photos.attached? %>
+            <%= image_tag car.photos.first, class: "card-img-top" %>
+          <% else %>
+            <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=500&auto=format&fit=crop" class="card-img-top" alt="<%= car.title %>">
+          <% end %>
+          
+          <div class="card-body">
+            <h5 class="card-title"><%= car.title %></h5>
+            <p class="card-text mb-2">
+              <i class="fas fa-map-marker-alt me-2"></i>
+              <%= car.location %>
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <small class="text-muted">
+                  <i class="fas fa-users me-2"></i>
+                  <%= car.capacity %> places
+                </small>
+              </div>
+              <div class="price">
+                <%= number_to_currency(car.daily_price, unit: "€", format: "%n %u") %>/jour
+              </div>
+            </div>
+          </div>
+          
+          <%= link_to "", car_path(car), class: "stretched-link" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-4 mb-md-0">
+        <h5>À propos d'Airbncar</h5>
+        <ul>
+          <li><a href="#">Comment ça marche</a></li>
+          <li><a href="#">Qui sommes-nous</a></li>
+          <li><a href="#">Nos engagements</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      
+      <div class="col-md-4 mb-4 mb-md-0">
+        <h5>Informations</h5>
+        <ul>
+          <li><a href="#">Centre d'aide</a></li>
+          <li><a href="#">Conditions générales</a></li>
+          <li><a href="#">Politique de confidentialité</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+      
+      <div class="col-md-4">
+        <h5>Suivez-nous</h5>
+        <ul>
+          <li><a href="#"><i class="fab fa-facebook me-2"></i>Facebook</a></li>
+          <li><a href="#"><i class="fab fa-twitter me-2"></i>Twitter</a></li>
+          <li><a href="#"><i class="fab fa-instagram me-2"></i>Instagram</a></li>
+          <li><a href="#"><i class="fab fa-linkedin me-2"></i>LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
