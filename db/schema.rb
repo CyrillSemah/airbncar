@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_10_164409) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_10_211416) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -100,16 +100,13 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_10_164409) do
   end
 
   create_table "reviews", force: :cascade do |t|
-    t.integer "rating", null: false
-    t.text "comment", null: false
+    t.integer "rating"
+    t.text "comment"
     t.bigint "user_id", null: false
     t.bigint "car_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["car_id", "created_at"], name: "index_reviews_on_car_id_and_created_at"
     t.index ["car_id"], name: "index_reviews_on_car_id"
-    t.index ["rating"], name: "index_reviews_on_rating"
-    t.index ["user_id", "car_id"], name: "index_reviews_on_user_id_and_car_id", unique: true
     t.index ["user_id"], name: "index_reviews_on_user_id"
   end
 

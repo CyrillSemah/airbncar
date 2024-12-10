@@ -1,0 +1,43 @@
+<div class="card mb-4">
+  <div class="card-body">
+    <div class="row align-items-center">
+      <div class="col-md-3 text-center">
+        <h2 class="mb-0"><%= car.average_rating %></h2>
+        <div class="text-warning mb-2">
+          <% car.average_rating.to_i.times do %>
+            <i class="bi bi-star-fill"></i>
+          <% end %>
+          <% if car.average_rating % 1 >= 0.5 %>
+            <i class="bi bi-star-half"></i>
+          <% end %>
+          <% (5 - car.average_rating.ceil).times do %>
+            <i class="bi bi-star"></i>
+          <% end %>
+        </div>
+        <small class="text-muted">
+          <%= pluralize(car.reviews.count, 'review') %>
+        </small>
+      </div>
+
+      <div class="col-md-9">
+        <% car.rating_distribution.reverse_each do |rating, data| %>
+          <div class="d-flex align-items-center mb-1">
+            <div class="text-muted" style="width: 60px;">
+              <%= rating %> <i class="bi bi-star-fill text-warning"></i>
+            </div>
+            <div class="progress flex-grow-1" style="height: 8px;">
+              <div class="progress-bar bg-warning" 
+                   style="width: <%= data[:percentage] %>%"
+                   aria-valuenow="<%= data[:percentage] %>"
+                   aria-valuemin="0"
+                   aria-valuemax="100"></div>
+            </div>
+            <div class="text-muted ms-2" style="width: 40px;">
+              <%= data[:count] %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

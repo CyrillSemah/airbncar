@@ -1,0 +1,31 @@
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-start mb-2">
+      <div>
+        <h6 class="card-subtitle mb-2 text-muted">
+          <%= review.user.email %>
+        </h6>
+        <div class="text-warning">
+          <% review.rating.times do %>
+            <i class="bi bi-star-fill"></i>
+          <% end %>
+          <% (5 - review.rating).times do %>
+            <i class="bi bi-star"></i>
+          <% end %>
+        </div>
+      </div>
+      <% if review.user == current_user %>
+        <%= button_to car_review_path(review.car, review), 
+            method: :delete,
+            class: "btn btn-link text-danger p-0",
+            form: { data: { turbo_confirm: "Are you sure?" } } do %>
+          <i class="bi bi-trash"></i>
+        <% end %>
+      <% end %>
+    </div>
+    <p class="card-text"><%= review.comment %></p>
+    <small class="text-muted">
+      Posted <%= time_ago_in_words(review.created_at) %> ago
+    </small>
+  </div>
+</div>
