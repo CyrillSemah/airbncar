@@ -2,10 +2,10 @@
   <% if car.photo.attached? %>
     <%= cl_image_tag car.photo.key, height: 100, width: 150, crop: :fill %>
   <% end %>
-  <h5 class="mt-2"><%= car.brand %> <%= car.model %></h5>
+  <h5 class="mt-2"><%= car.title %></h5>
   <p>
-    <strong><%= car.price_per_day %>€</strong> / jour<br>
-    <%= car.address %>
+    <strong><%= number_to_currency(car.daily_price) %></strong> / jour<br>
+    <%= car.location %>
   </p>
   <%= link_to "Voir détails", car_path(car), class: "btn btn-sm btn-primary" %>
 </div>

@@ -4,15 +4,15 @@ class SearchesController < ApplicationController
 
     # Filtrer par localisation et distance
     if params[:location].present?
-      @cars = @cars.near(params[:location], params[:distance] || 10)
+      @cars = @cars.near_location(params[:location], params[:distance] || 10)
     end
 
     # Filtrer par prix
     if params[:price_min].present?
-      @cars = @cars.where("price_per_day >= ?", params[:price_min])
+      @cars = @cars.where("daily_price >= ?", params[:price_min])
     end
     if params[:price_max].present?
-      @cars = @cars.where("price_per_day <= ?", params[:price_max])
+      @cars = @cars.where("daily_price <= ?", params[:price_max])
     end
 
     # Préparer les marqueurs pour la carte

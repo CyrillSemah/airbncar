@@ -1,0 +1,66 @@
+<% content_for :title, "Modifier la voiture" %>
+
+<div class="card shadow mb-4">
+  <div class="card-body">
+    <%= form_with(model: [:admin, @car], local: true) do |f| %>
+      <% if @car.errors.any? %>
+        <div class="alert alert-danger">
+          <h4><%= pluralize(@car.errors.count, "erreur") %> :</h4>
+          <ul>
+            <% @car.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="mb-3">
+        <%= f.label :title, "Titre", class: "form-label" %>
+        <%= f.text_field :title, class: "form-control" %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :description, class: "form-label" %>
+        <%= f.text_area :description, class: "form-control" %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :location, "Localisation", class: "form-label" %>
+        <%= f.text_field :location, class: "form-control" %>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="mb-3">
+            <%= f.label :capacity, "Capacité", class: "form-label" %>
+            <%= f.number_field :capacity, class: "form-control" %>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="mb-3">
+            <%= f.label :size, "Taille", class: "form-label" %>
+            <%= f.select :size, ['Compact', 'Medium', 'Large', 'SUV'], {}, class: "form-select" %>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="mb-3">
+            <%= f.label :daily_price, "Prix par jour", class: "form-label" %>
+            <%= f.number_field :daily_price, class: "form-control" %>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :photo, class: "form-label" %>
+        <%= f.file_field :photo, class: "form-control" %>
+      </div>
+
+      <div class="mt-4">
+        <%= f.submit "Mettre à jour", class: "btn btn-primary" %>
+        <%= link_to "Retour", admin_cars_path, class: "btn btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

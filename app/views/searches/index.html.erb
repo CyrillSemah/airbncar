@@ -53,11 +53,12 @@
               <% end %>
               
               <div class="card-body">
-                <h5 class="card-title"><%= car.brand %> <%= car.model %></h5>
+                <h5 class="card-title"><%= car.title %></h5>
                 <p class="card-text">
-                  <i class="bi bi-geo-alt"></i> <%= car.address %><br>
-                  <i class="bi bi-currency-euro"></i> <%= car.price_per_day %> / jour<br>
-                  <i class="bi bi-people"></i> <%= car.capacity %> places
+                  <i class="bi bi-geo-alt"></i> <%= car.location %><br>
+                  <i class="bi bi-currency-euro"></i> <%= number_to_currency(car.daily_price) %> / jour<br>
+                  <i class="bi bi-people"></i> <%= car.capacity %> places<br>
+                  <i class="bi bi-rulers"></i> <%= car.size %>
                 </p>
                 <%= link_to "Voir détails", car_path(car), class: "btn btn-outline-primary" %>
               </div>
