@@ -4,15 +4,15 @@ class Car < ApplicationRecord
   has_many :reviews, dependent: :destroy
   has_one_attached :photo
 
-  validates :title, presence: true
+  validates :brand, presence: true
+  validates :model, presence: true
   validates :description, presence: true, length: { minimum: 10 }
-  validates :location, presence: true
+  validates :address, presence: true
   validates :capacity, presence: true, numericality: { greater_than: 0 }
-  validates :size, presence: true
-  validates :daily_price, presence: true, numericality: { greater_than: 0 }
+  validates :price_per_day, presence: true, numericality: { greater_than: 0 }
 
-  geocoded_by :location
-  after_validation :geocode, if: :will_save_change_to_location?
+  geocoded_by :address
+  after_validation :geocode, if: :will_save_change_to_address?
 
   scope :near_location, ->(location, distance_km = 10) {
     near(location, distance_km, units: :km)
