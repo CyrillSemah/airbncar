@@ -1,19 +1,19 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# Fixture pour les voitures de test
 
 one:
-  title: MyString
-  description: MyText
-  location: MyString
-  capacity: 1
-  size: MyString
-  daily_price: 9.99
+  title: "Peugeot 308"
+  description: "Une voiture familiale confortable et économique"
+  location: "Paris"
+  capacity: 5
+  size: "medium"
+  daily_price: 45.0
   user: one
 
 two:
-  title: MyString
-  description: MyText
-  location: MyString
-  capacity: 1
-  size: MyString
-  daily_price: 9.99
+  title: "Renault Clio"
+  description: "Parfaite pour la ville, facile à garer"
+  location: "Lyon"
+  capacity: 4
+  size: "small"
+  daily_price: 35.0
   user: two
