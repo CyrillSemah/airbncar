@@ -1,0 +1,70 @@
+<div class="container mt-4">
+  <div class="row">
+    <!-- Filtres de recherche -->
+    <div class="col-12 col-md-3 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Filtres</h5>
+          <%= form_with url: searches_path, method: :get, local: true do |f| %>
+            <div class="mb-3">
+              <%= f.label :location, "Localisation", class: "form-label" %>
+              <%= f.text_field :location, class: "form-control", value: params[:location] %>
+            </div>
+
+            <div class="mb-3">
+              <%= f.label :distance, "Distance (km)", class: "form-label" %>
+              <%= f.number_field :distance, class: "form-control", value: params[:distance] || 10 %>
+            </div>
+
+            <div class="mb-3">
+              <%= f.label :price_min, "Prix minimum", class: "form-label" %>
+              <%= f.number_field :price_min, class: "form-control", value: params[:price_min] %>
+            </div>
+
+            <div class="mb-3">
+              <%= f.label :price_max, "Prix maximum", class: "form-label" %>
+              <%= f.number_field :price_max, class: "form-control", value: params[:price_max] %>
+            </div>
+
+            <%= f.submit "Rechercher", class: "btn btn-primary w-100" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Résultats et carte -->
+    <div class="col-12 col-md-9">
+      <!-- Carte -->
+      <div style="height: 400px; width: 100%;"
+           data-controller="map"
+           data-map-markers-value="<%= @markers.to_json %>"
+           data-map-api-key-value="<%= ENV['MAPBOX_ACCESS_TOKEN'] %>">
+      </div>
+
+      <!-- Liste des voitures -->
+      <div class="row mt-4">
+        <% @cars.each do |car| %>
+          <div class="col-12 col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+              <% if car.photo.attached? %>
+                <%= cl_image_tag car.photo.key, class: "card-img-top", height: 200, style: "object-fit: cover;" %>
+              <% else %>
+                <div class="card-img-top bg-secondary" style="height: 200px;"></div>
+              <% end %>
+              
+              <div class="card-body">
+                <h5 class="card-title"><%= car.brand %> <%= car.model %></h5>
+                <p class="card-text">
+                  <i class="bi bi-geo-alt"></i> <%= car.address %><br>
+                  <i class="bi bi-currency-euro"></i> <%= car.price_per_day %> / jour<br>
+                  <i class="bi bi-people"></i> <%= car.capacity %> places
+                </p>
+                <%= link_to "Voir détails", car_path(car), class: "btn btn-outline-primary" %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
