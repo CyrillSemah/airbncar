@@ -1,0 +1,50 @@
+<% content_for :title, "Gestion des voitures" %>
+
+<div class="card shadow mb-4">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Photo</th>
+            <th>Titre</th>
+            <th>Propriétaire</th>
+            <th>Localisation</th>
+            <th>Prix/jour</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @cars.each do |car| %>
+            <tr>
+              <td><%= car.id %></td>
+              <td>
+                <% if car.photo.attached? %>
+                  <%= image_tag car.photo, class: "img-thumbnail", style: "max-width: 100px;" %>
+                <% end %>
+              </td>
+              <td><%= car.title %></td>
+              <td><%= car.user.email %></td>
+              <td><%= car.location %></td>
+              <td><%= number_to_currency(car.daily_price) %></td>
+              <td>
+                <%= link_to admin_car_path(car), class: "btn btn-sm btn-info" do %>
+                  <i class="bi bi-eye"></i>
+                <% end %>
+                <%= link_to edit_admin_car_path(car), class: "btn btn-sm btn-primary" do %>
+                  <i class="bi bi-pencil"></i>
+                <% end %>
+                <%= link_to admin_car_path(car), 
+                    class: "btn btn-sm btn-danger",
+                    data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr ?" } do %>
+                  <i class="bi bi-trash"></i>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

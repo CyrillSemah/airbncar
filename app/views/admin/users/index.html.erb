@@ -1,0 +1,50 @@
+<% content_for :title, "Gestion des utilisateurs" %>
+
+<div class="card shadow mb-4">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Date d'inscription</th>
+            <th>Voitures</th>
+            <th>Réservations</th>
+            <th>Admin</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @users.each do |user| %>
+            <tr>
+              <td><%= user.id %></td>
+              <td><%= user.email %></td>
+              <td><%= l user.created_at, format: :short %></td>
+              <td><%= user.cars.count %></td>
+              <td><%= user.bookings.count %></td>
+              <td>
+                <span class="badge bg-<%= user.admin? ? 'success' : 'secondary' %>">
+                  <%= user.admin? ? 'Oui' : 'Non' %>
+                </span>
+              </td>
+              <td>
+                <%= link_to admin_user_path(user), class: "btn btn-sm btn-info" do %>
+                  <i class="bi bi-eye"></i>
+                <% end %>
+                <%= link_to edit_admin_user_path(user), class: "btn btn-sm btn-primary" do %>
+                  <i class="bi bi-pencil"></i>
+                <% end %>
+                <%= link_to admin_user_path(user), 
+                    class: "btn btn-sm btn-danger",
+                    data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr ?" } do %>
+                  <i class="bi bi-trash"></i>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

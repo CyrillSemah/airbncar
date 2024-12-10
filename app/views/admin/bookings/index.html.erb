@@ -1,0 +1,52 @@
+<% content_for :title, "Gestion des réservations" %>
+
+<div class="card shadow mb-4">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Voiture</th>
+            <th>Client</th>
+            <th>Date début</th>
+            <th>Date fin</th>
+            <th>Prix total</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @bookings.each do |booking| %>
+            <tr>
+              <td><%= booking.id %></td>
+              <td><%= booking.car.title %></td>
+              <td><%= booking.user.email %></td>
+              <td><%= l booking.start_date %></td>
+              <td><%= l booking.end_date %></td>
+              <td><%= number_to_currency(booking.total_price) %></td>
+              <td>
+                <span class="badge bg-<%= booking.status == 'confirmed' ? 'success' : 'warning' %>">
+                  <%= booking.status %>
+                </span>
+              </td>
+              <td>
+                <%= link_to admin_booking_path(booking), class: "btn btn-sm btn-info" do %>
+                  <i class="bi bi-eye"></i>
+                <% end %>
+                <%= link_to edit_admin_booking_path(booking), class: "btn btn-sm btn-primary" do %>
+                  <i class="bi bi-pencil"></i>
+                <% end %>
+                <%= link_to admin_booking_path(booking), 
+                    class: "btn btn-sm btn-danger",
+                    data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr ?" } do %>
+                  <i class="bi bi-trash"></i>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

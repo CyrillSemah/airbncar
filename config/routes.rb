@@ -10,4 +10,12 @@ Rails.application.routes.draw do
   
   resources :bookings, only: [:index]
   resources :searches, only: [:index]
+
+  # Interface d'administration
+  namespace :admin do
+    get 'dashboard', to: 'dashboard#index'
+    resources :cars
+    resources :bookings
+    resources :users
+  end
 end
