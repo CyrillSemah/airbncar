@@ -187,6 +187,7 @@ GEM
     nokogiri (1.17.1-x86_64-linux)
       racc (~> 1.4)
     orm_adapter (0.5.0)
+    ostruct (0.6.1)
     popper_js (2.11.8)
     psych (5.2.1)
       date
@@ -342,6 +343,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   jquery-rails
+  ostruct
   puma (>= 5.0)
   rack-mini-profiler
   rails (~> 7.1.2)
