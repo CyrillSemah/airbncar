@@ -1,23 +1,40 @@
 require "test_helper"
 
 class BookingsControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    @user = users(:one)
+    @car = cars(:one)
+    @booking = bookings(:one)
+    sign_in @user
+  end
+
   test "should get index" do
-    get bookings_index_url
+    get car_bookings_url(@car)
     assert_response :success
   end
 
-  test "should get create" do
-    get bookings_create_url
+  test "should create booking" do
+    assert_difference('Booking.count') do
+      post car_bookings_url(@car), params: {
+        booking: {
+          start_date: Date.today,
+          end_date: Date.today + 7,
+          people: 2
+        }
+      }
+    end
+    assert_redirected_to car_url(@car)
+  end
+
+  test "should show booking" do
+    get booking_url(@booking)
     assert_response :success
   end
 
-  test "should get show" do
-    get bookings_show_url
-    assert_response :success
-  end
-
-  test "should get destroy" do
-    get bookings_destroy_url
-    assert_response :success
+  test "should destroy booking" do
+    assert_difference('Booking.count', -1) do
+      delete booking_url(@booking)
+    end
+    assert_redirected_to cars_url
   end
 end

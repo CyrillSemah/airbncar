@@ -1,41 +1,37 @@
-class BookingsController < ApplicationController
-  before_action :set_booking, only: [:show, :destroy]
+class Booking < ApplicationRecord
+  belongs_to :user
+  belongs_to :car
 
-  # GET /cars/:car_id/bookings
-  def index
-    @car = Car.find(params[:car_id])
-    @bookings = @car.bookings
-  end
-
-  # POST /cars/:car_id/bookings
-  def create
-    @car = Car.find(params[:car_id])
-    @booking = @car.bookings.build(booking_params)
-    @booking.user = current_user
-
-    if @booking.save
-      redirect_to car_path(@car), notice: "Booking successfully created!"
-    else
-      redirect_to car_path(@car), alert: "Unable to create booking."
-    end
-  end
-
-  # GET /bookings/:id
-  def show; end
-
-  # DELETE /bookings/:id
-  def destroy
-    @booking.destroy
-    redirect_to cars_path, notice: "Booking successfully deleted!"
-  end
+  validates :start_date, presence: true
+  validates :end_date, presence: true
+  validates :number_of_people, presence: true, numericality: { greater_than: 0 }
+  validate :end_date_after_start_date
+  validate :car_available
+  validate :number_of_people_within_capacity
 
   private
 
-  def booking_params
-    params.require(:booking).permit(:start_date, :end_date, :people)
+  def end_date_after_start_date
+    return if end_date.blank? || start_date.blank?
+
+    if end_date < start_date
+      errors.add(:end_date, "doit être après la date de début")
+    end
   end
 
-  def set_booking
-    @booking = Booking.find(params[:id])
+  def car_available
+    return if car.nil? || start_date.blank? || end_date.blank?
+
+    unless car.available?(start_date, end_date)
+      errors.add(:base, "La voiture n'est pas disponible pour ces dates")
+    end
+  end
+
+  def number_of_people_within_capacity
+    return if car.nil? || number_of_people.blank?
+
+    if number_of_people > car.capacity
+      errors.add(:number_of_people, "ne peut pas dépasser la capacité de la voiture")
+    end
   end
 end
