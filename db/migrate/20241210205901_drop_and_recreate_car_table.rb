@@ -1,4 +1,4 @@
-class DropAndRecreateCarTable < ActiveRecord::Migration[8.0]
+class DropAndRecreateCarTable < ActiveRecord::Migration[7.1]
   def up
     drop_table :cars, if_exists: true
 

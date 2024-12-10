@@ -1,7 +1,51 @@
 // External libraries
-@import "bootstrap/scss/bootstrap";
-@import "bootstrap-icons/font/bootstrap-icons";
-@import "mapbox-gl/dist/mapbox-gl";
+@import "bootstrap";
+@import "font-awesome";
+
+// Variables
+$primary-color: #FF385C;
+$secondary-color: #00A699;
+$dark-gray: #484848;
+$light-gray: #767676;
+$background-color: #F7F7F7;
+
+// Global styles
+body {
+  font-family: 'Circular', -apple-system, BlinkMacSystemFont, Roboto, Helvetica Neue, sans-serif;
+  color: $dark-gray;
+  background-color: $background-color;
+}
 
 // Components
-@import "components/map";
+.navbar {
+  background-color: white;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+  border: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+.btn-primary {
+  background-color: $primary-color;
+  border-color: $primary-color;
+  
+  &:hover {
+    background-color: darken($primary-color, 10%);
+    border-color: darken($primary-color, 10%);
+  }
+}
+
+// Footer
+.footer {
+  background-color: white;
+  border-top: 1px solid $light-gray;
+  padding: 2rem 0;
+  margin-top: 3rem;
+}
