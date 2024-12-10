@@ -21,7 +21,7 @@ class Booking < ApplicationRecord
 
   def car_available
     return if car.nil? || start_date.blank? || end_date.blank?
-
+    
     unless car.available?(start_date, end_date)
       errors.add(:base, "La voiture n'est pas disponible pour ces dates")
     end
