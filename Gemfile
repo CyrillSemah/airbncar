@@ -44,7 +44,7 @@ gem "bootsnap", require: false
 # Bootstrap and styling
 gem "bootstrap", "~> 5.3.2"
 gem "sassc-rails"
-gem "font-awesome-sass", "~> 6.5.1"
+gem "font-awesome-sass", "~> 6.7.2"
 
 # Authentication
 gem "devise"
